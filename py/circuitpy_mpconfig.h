@@ -450,7 +450,7 @@ void supervisor_run_background_tasks_if_tick(void);
 #endif
 
 #ifndef CIRCUITPY_PYSTACK_SIZE
-#define CIRCUITPY_PYSTACK_SIZE 2048
+#define CIRCUITPY_PYSTACK_SIZE 1536
 #endif
 
 // Wait this long before sleeping immediately after startup, to see if we are connected via USB or BLE.
