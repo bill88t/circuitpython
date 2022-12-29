@@ -29,6 +29,9 @@
 #define MICROPY_HW_BOARD_NAME       "S2Mini"
 #define MICROPY_HW_MCU_NAME         "ESP32S2-S2FN4R2" // from Wemos MP
 
+// Increase the pystack to 5kb, since this board has PSRAM.
+#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
+
 #define MICROPY_HW_LED_STATUS (&pin_GPIO15)
 
 #define DEFAULT_I2C_BUS_SCL (&pin_GPIO35) // no I2C labels on S2 Mini, def from Wemos MP

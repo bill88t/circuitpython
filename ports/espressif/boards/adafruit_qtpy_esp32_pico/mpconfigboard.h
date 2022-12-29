@@ -27,6 +27,9 @@
 #define MICROPY_HW_BOARD_NAME       "Adafruit QT Py ESP32 PICO"
 #define MICROPY_HW_MCU_NAME         "ESP32"
 
+// Increase the pystack to 5kb, since this board has PSRAM.
+#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
+
 #define MICROPY_HW_NEOPIXEL (&pin_GPIO5)
 
 #define CIRCUITPY_BOARD_I2C         (2)

@@ -29,6 +29,9 @@
 #define MICROPY_HW_BOARD_NAME       "Gravitech Cucumber RS"
 #define MICROPY_HW_MCU_NAME         "ESP32S2"
 
+// Increase the pystack to 5kb, since this board has PSRAM.
+#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
+
 #define MICROPY_HW_NEOPIXEL (&pin_GPIO18)
 
 #define MICROPY_HW_LED_STATUS (&pin_GPIO2)

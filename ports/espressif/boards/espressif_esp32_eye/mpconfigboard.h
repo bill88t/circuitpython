@@ -29,6 +29,9 @@
 #define MICROPY_HW_BOARD_NAME       "Espressif ESP32-EYE"
 #define MICROPY_HW_MCU_NAME         "ESP32"
 
+// Increase the pystack to 5kb, since this board has PSRAM.
+#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
+
 #define MICROPY_HW_LED_STATUS (&pin_GPIO21)
 
 #define CIRCUITPY_BOARD_I2C         (1)

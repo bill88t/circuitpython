@@ -29,6 +29,9 @@
 #define MICROPY_HW_BOARD_NAME       "ESP32-S3-EYE"
 #define MICROPY_HW_MCU_NAME         "ESP32S3"
 
+// Increase the pystack to 5kb, since this board has PSRAM.
+#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
+
 // Shared by the camera and accelerometer
 #define DEFAULT_I2C_BUS_SDA         (&pin_GPIO4)
 #define DEFAULT_I2C_BUS_SCL         (&pin_GPIO5)

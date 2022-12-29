@@ -29,6 +29,9 @@
 #define MICROPY_HW_BOARD_NAME       "M5Stack Core Fire"
 #define MICROPY_HW_MCU_NAME         "ESP32"
 
+// Increase the pystack to 5kb, since this board has PSRAM.
+#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
+
 #define CIRCUITPY_BOARD_I2C         (1)
 #define CIRCUITPY_BOARD_I2C_PIN     {{.scl = &pin_GPIO22, .sda = &pin_GPIO21}}
 

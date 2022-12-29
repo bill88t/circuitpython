@@ -38,6 +38,9 @@
 #define MICROPY_PY_REVERSE_SPECIAL_METHODS       (1)
 #define MICROPY_PY_SYS_STDIO_BUFFER              (1)
 
+// Increase the pystack by 512b, since this port can handle it.
+#define CIRCUITPY_PYSTACK_SIZE 2048 // 1536 is the default
+
 // 24kiB stack
 #define CIRCUITPY_DEFAULT_STACK_SIZE            (24 * 1024)
 

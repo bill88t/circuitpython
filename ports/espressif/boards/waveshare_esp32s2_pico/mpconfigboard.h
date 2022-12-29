@@ -29,4 +29,7 @@
 #define MICROPY_HW_BOARD_NAME       "Waveshare ESP32-S2-Pico"
 #define MICROPY_HW_MCU_NAME         "ESP32S2"
 
+// Increase the pystack to 5kb, since this board has PSRAM.
+#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
+
 #define MICROPY_HW_LED_STATUS (&pin_GPIO9)
