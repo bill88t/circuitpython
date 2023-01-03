@@ -211,4 +211,19 @@
     ble_drv_evt_handler_entry_t *ble_drv_evt_handler_entries;   \
 
 
+#ifdef CIRCUITPY_PYSTACK_SIZE
+#undef CIRCUITPY_PYSTACK_SIZE
+#endif
+#define CIRCUITPY_PYSTACK_SIZE 0
+
+#ifdef MICROPY_ENABLE_PYSTACK
+#undef MICROPY_ENABLE_PYSTACK
+#endif
+#define MICROPY_ENABLE_PYSTACK (0)
+
+#ifdef MICROPY_STACKLESS
+#undef MICROPY_STACKLESS
+#endif
+#define MICROPY_STACKLESS (1)
+
 #endif  // NRF5_MPCONFIGPORT_H__

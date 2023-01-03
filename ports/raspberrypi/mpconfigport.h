@@ -51,6 +51,21 @@
 // This also includes mpconfigboard.h.
 #include "py/circuitpy_mpconfig.h"
 
+#ifdef CIRCUITPY_PYSTACK_SIZE
+#undef CIRCUITPY_PYSTACK_SIZE
+#endif
+#define CIRCUITPY_PYSTACK_SIZE 0
+
+#ifdef MICROPY_ENABLE_PYSTACK
+#undef MICROPY_ENABLE_PYSTACK
+#endif
+#define MICROPY_ENABLE_PYSTACK (0)
+
+#ifdef MICROPY_STACKLESS
+#undef MICROPY_STACKLESS
+#endif
+#define MICROPY_STACKLESS (1)
+
 #define MICROPY_PORT_ROOT_POINTERS \
     mp_obj_t counting[NUM_PWM_SLICES]; \
     mp_obj_t playing_audio[NUM_DMA_CHANNELS]; \
