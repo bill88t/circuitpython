@@ -31,9 +31,6 @@
 #define MICROPY_HW_BOARD_NAME       "Artisense Reference Design RD00"
 #define MICROPY_HW_MCU_NAME         "ESP32S2"
 
-// Increase the pystack to 5kb, since this board has PSRAM.
-#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
-
 #define MICROPY_HW_NEOPIXEL (&pin_GPIO45)
 
 #define DEFAULT_UART_BUS_RX (&pin_GPIO17)

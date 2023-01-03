@@ -29,9 +29,6 @@
 #define MICROPY_HW_BOARD_NAME       "LOLIN S3 16MB Flash 8MB PSRAM"
 #define MICROPY_HW_MCU_NAME         "ESP32S3"
 
-// Increase the pystack to 5kb, since this board has PSRAM.
-#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
-
 #define MICROPY_HW_NEOPIXEL (&pin_GPIO38)
 
 // #define MICROPY_HW_LED_STATUS (&pin_GPIO13)

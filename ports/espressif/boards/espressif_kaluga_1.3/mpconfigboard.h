@@ -29,9 +29,6 @@
 #define MICROPY_HW_BOARD_NAME       "Kaluga 1"
 #define MICROPY_HW_MCU_NAME         "ESP32S2"
 
-// Increase the pystack to 5kb, since this board has PSRAM.
-#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
-
 #define MICROPY_HW_NEOPIXEL (&pin_GPIO45)
 
 #define DEFAULT_I2C_BUS_SCL (&pin_GPIO7)

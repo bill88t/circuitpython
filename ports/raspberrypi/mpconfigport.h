@@ -48,9 +48,6 @@
 
 #define CIRCUITPY_PROCESSOR_COUNT           (2)
 
-// Increase the pystack by 1kb, since this port can handle it.
-#define CIRCUITPY_PYSTACK_SIZE 2560 // 1536 is the default
-
 // This also includes mpconfigboard.h.
 #include "py/circuitpy_mpconfig.h"
 

@@ -29,9 +29,6 @@
 #define MICROPY_HW_BOARD_NAME       "S2Pico"
 #define MICROPY_HW_MCU_NAME         "ESP32S2-S2FN4R2" // from Wemos MP
 
-// Increase the pystack to 5kb, since this board has PSRAM.
-#define CIRCUITPY_PYSTACK_SIZE 5120 // 1536 is the default
-
 #define MICROPY_HW_LED_STATUS (&pin_GPIO10)
 
 #define DEFAULT_I2C_BUS_SCL (&pin_GPIO9) // JST SH Connector Pin 3 NOT STEMMA QT / Feather pinout
