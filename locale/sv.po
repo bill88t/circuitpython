@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2022-12-28 03:47+0000\n"
+"PO-Revision-Date: 2023-01-13 18:51+0000\n"
 "Last-Translator: Jonny Bergdahl <jonny@bergdahl.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sv\n"
@@ -113,6 +113,10 @@ msgstr "%q innehåller dubblettstift"
 msgid "%q failure: %d"
 msgstr "%q-fel: %d"
 
+#: py/argcheck.c
+msgid "%q in %q must be of type %q, not %q"
+msgstr "%q i %q måste vara av typen %q, inte %q"
+
 #: ports/espressif/common-hal/espulp/ULP.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 #: shared-bindings/digitalio/DigitalInOut.c
@@ -131,6 +135,10 @@ msgstr "%q init misslyckades"
 #: shared-bindings/dualbank/__init__.c
 msgid "%q is %q"
 msgstr "%q är %q"
+
+#: ports/raspberrypi/common-hal/wifi/Radio.c
+msgid "%q is read-only for this board"
+msgstr "%q är skrivskyddad för det här kortet"
 
 #: py/argcheck.c shared-bindings/usb_hid/Device.c
 msgid "%q length must be %d"
@@ -178,13 +186,14 @@ msgstr ""
 "%q måste vara en bytearray eller en array av typen \"h\", \"H\", \"b\" eller "
 "\"B\""
 
-#: py/argcheck.c py/obj.c py/objstrunicode.c
-msgid "%q must be of type %q"
-msgstr "%q måste vara av typen %q"
+#: ports/raspberrypi/bindings/cyw43/__init__.c py/argcheck.c py/objexcept.c
+#: shared-bindings/canio/CAN.c shared-bindings/digitalio/Pull.c
+msgid "%q must be of type %q or %q, not %q"
+msgstr "%q måste vara av typen %q eller %q, inte %q"
 
-#: py/objexcept.c shared-bindings/digitalio/Pull.c
-msgid "%q must be of type %q or None"
-msgstr "%q måste vara av typen %q eller None"
+#: py/argcheck.c py/obj.c py/objstrunicode.c
+msgid "%q must be of type %q, not %q"
+msgstr "%q måste vara av typen %q, inte %q"
 
 #: ports/atmel-samd/common-hal/busio/UART.c
 msgid "%q must be power of 2"
@@ -308,7 +317,7 @@ msgstr "Objektet '%s' stöder inte tilldelning"
 msgid "'%s' object doesn't support item deletion"
 msgstr "Objektet '%s' stöder inte borttagning"
 
-#: ports/raspberrypi/common-hal/wifi/Radio.c py/runtime.c
+#: py/runtime.c
 msgid "'%s' object has no attribute '%q'"
 msgstr "Objektet '%s' har inget attribut '%q'"
 
@@ -945,21 +954,9 @@ msgstr "Fel i regex"
 msgid "Error: Failure to bind"
 msgstr "Fel: Bind misslyckades"
 
-#: ports/espressif/bindings/espulp/ULP.c py/enum.c
-#: shared-bindings/_bleio/__init__.c shared-bindings/aesio/aes.c
-#: shared-bindings/alarm/__init__.c shared-bindings/busio/SPI.c
-#: shared-bindings/microcontroller/Pin.c
-#: shared-bindings/neopixel_write/__init__.c
-msgid "Expected a %q"
-msgstr "Förväntade %q"
-
-#: ports/raspberrypi/bindings/cyw43/__init__.c
-msgid "Expected a %q or %q"
-msgstr "Förväntade %q eller %q"
-
 #: shared-bindings/alarm/__init__.c
-msgid "Expected an %q"
-msgstr "Förväntade en %q"
+msgid "Expected a kind of %q"
+msgstr "Förväntade en typ av %q"
 
 #: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
@@ -1132,11 +1129,6 @@ msgstr "I2C-enhet används redan"
 #: shared-bindings/audiobusio/I2SOut.c
 msgid "I2SOut not available"
 msgstr "I2SOut är inte tillgängligt"
-
-#: shared-bindings/aesio/aes.c
-#, c-format
-msgid "IV must be %d bytes long"
-msgstr "IV måste vara %d byte lång"
 
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 msgid "In-buffer elements must be <= 4 bytes long"
@@ -1603,10 +1595,6 @@ msgstr "Inte ansluten"
 msgid "Not playing"
 msgstr "Ingen uppspelning"
 
-#: shared-bindings/_bleio/__init__.c
-msgid "Not settable"
-msgstr "Går inte sätta"
-
 #: ports/espressif/common-hal/paralleldisplay/ParallelBus.c
 #, c-format
 msgid "Number of data_pins must be 8 or 16, not %d"
@@ -1891,18 +1879,15 @@ msgstr "RTC stöds inte av detta kort"
 msgid "Random number generation error"
 msgstr "Fel vid generering av slumptal"
 
+#: shared-bindings/_bleio/__init__.c
 #: shared-bindings/memorymonitor/AllocationSize.c
-#: shared-bindings/pulseio/PulseIn.c
+#: shared-bindings/pulseio/PulseIn.c shared-module/displayio/Bitmap.c
 msgid "Read-only"
 msgstr "Skrivskyddad"
 
 #: extmod/vfs_fat.c py/moduerrno.c
 msgid "Read-only filesystem"
 msgstr "Skrivskyddat filsystem"
-
-#: shared-module/displayio/Bitmap.c
-msgid "Read-only object"
-msgstr "Skrivskyddat objekt"
 
 #: ports/espressif/common-hal/espidf/__init__.c ports/espressif/esp_error.c
 msgid "Received response was invalid"
@@ -2085,7 +2070,10 @@ msgstr ""
 msgid "The above exception was the direct cause of the following exception:"
 msgstr "Ovanstående undantag var den direkta orsaken till följande undantag:"
 
+#: ports/espressif/boards/m5stack_atom_echo/mpconfigboard.h
 #: ports/espressif/boards/m5stack_atom_lite/mpconfigboard.h
+#: ports/espressif/boards/m5stack_atom_matrix/mpconfigboard.h
+#: ports/espressif/boards/m5stack_atom_u/mpconfigboard.h
 msgid "The central button was pressed at start up.\n"
 msgstr "Mittknappen trycktes in vid start.\n"
 
@@ -2766,6 +2754,10 @@ msgstr "kan inte sätta blockstorlek 512"
 msgid "can't set attribute"
 msgstr "kan inte att ange attribut"
 
+#: py/runtime.c
+msgid "can't set attribute '%q'"
+msgstr "kan inte sätta attribut '%q'"
+
 #: py/emitnative.c
 msgid "can't store '%q'"
 msgstr "kan inte lagra '%q'"
@@ -3028,14 +3020,6 @@ msgstr ""
 msgid "exceptions must derive from BaseException"
 msgstr "exceptions måste ärvas från BaseException"
 
-#: shared-bindings/canio/CAN.c
-msgid "expected '%q' but got '%q'"
-msgstr "förväntade '%q' men fick '%q'"
-
-#: shared-bindings/canio/CAN.c
-msgid "expected '%q' or '%q' but got '%q'"
-msgstr "förväntade '%q' eller '%q' men fick '%q'"
-
 #: py/objstr.c
 msgid "expected ':' after format specifier"
 msgstr "förväntade ':' efter formatspecifikation"
@@ -3133,10 +3117,6 @@ msgstr "typsnitt måste vara 2048 bytes långt"
 #: py/objstr.c
 msgid "format requires a dict"
 msgstr "formatet kräver en dict"
-
-#: shared-bindings/microcontroller/Processor.c
-msgid "frequency is read-only for this board"
-msgstr "frekvens är skrivskyddad för detta kort"
 
 #: py/objdeque.c
 msgid "full"
@@ -4412,6 +4392,40 @@ msgstr "zi måste vara av typ float"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi måste vara i formen (n_section, 2)"
+
+#~ msgid "%q must be of type %q"
+#~ msgstr "%q måste vara av typen %q"
+
+#~ msgid "%q must be of type %q or None"
+#~ msgstr "%q måste vara av typen %q eller None"
+
+#~ msgid "Expected a %q"
+#~ msgstr "Förväntade %q"
+
+#~ msgid "Expected a %q or %q"
+#~ msgstr "Förväntade %q eller %q"
+
+#~ msgid "Expected an %q"
+#~ msgstr "Förväntade en %q"
+
+#, c-format
+#~ msgid "IV must be %d bytes long"
+#~ msgstr "IV måste vara %d byte lång"
+
+#~ msgid "Not settable"
+#~ msgstr "Går inte sätta"
+
+#~ msgid "expected '%q' but got '%q'"
+#~ msgstr "förväntade '%q' men fick '%q'"
+
+#~ msgid "expected '%q' or '%q' but got '%q'"
+#~ msgstr "förväntade '%q' eller '%q' men fick '%q'"
+
+#~ msgid "Read-only object"
+#~ msgstr "Skrivskyddat objekt"
+
+#~ msgid "frequency is read-only for this board"
+#~ msgstr "frekvens är skrivskyddad för detta kort"
 
 #~ msgid "Pins 21+ not supported from ULP"
 #~ msgstr "Pins 21+ stöds inte av ULP"

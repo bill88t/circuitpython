@@ -115,6 +115,10 @@ msgstr "%q contains duplicate pins"
 msgid "%q failure: %d"
 msgstr "%q failure: %d"
 
+#: py/argcheck.c
+msgid "%q in %q must be of type %q, not %q"
+msgstr ""
+
 #: ports/espressif/common-hal/espulp/ULP.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 #: shared-bindings/digitalio/DigitalInOut.c
@@ -132,6 +136,10 @@ msgstr ""
 
 #: shared-bindings/dualbank/__init__.c
 msgid "%q is %q"
+msgstr ""
+
+#: ports/raspberrypi/common-hal/wifi/Radio.c
+msgid "%q is read-only for this board"
 msgstr ""
 
 #: py/argcheck.c shared-bindings/usb_hid/Device.c
@@ -178,12 +186,13 @@ msgstr ""
 msgid "%q must be a bytearray or array of type 'h', 'H', 'b', or 'B'"
 msgstr ""
 
-#: py/argcheck.c py/obj.c py/objstrunicode.c
-msgid "%q must be of type %q"
+#: ports/raspberrypi/bindings/cyw43/__init__.c py/argcheck.c py/objexcept.c
+#: shared-bindings/canio/CAN.c shared-bindings/digitalio/Pull.c
+msgid "%q must be of type %q or %q, not %q"
 msgstr ""
 
-#: py/objexcept.c shared-bindings/digitalio/Pull.c
-msgid "%q must be of type %q or None"
+#: py/argcheck.c py/obj.c py/objstrunicode.c
+msgid "%q must be of type %q, not %q"
 msgstr ""
 
 #: ports/atmel-samd/common-hal/busio/UART.c
@@ -308,7 +317,7 @@ msgstr "'%s' object doesn't support item assignment"
 msgid "'%s' object doesn't support item deletion"
 msgstr "'%s' object doesn't support item deletion"
 
-#: ports/raspberrypi/common-hal/wifi/Radio.c py/runtime.c
+#: py/runtime.c
 msgid "'%s' object has no attribute '%q'"
 msgstr "'%s' object has no attribute '%q'"
 
@@ -942,20 +951,8 @@ msgstr "Error in regex"
 msgid "Error: Failure to bind"
 msgstr "Error: Failure to bind"
 
-#: ports/espressif/bindings/espulp/ULP.c py/enum.c
-#: shared-bindings/_bleio/__init__.c shared-bindings/aesio/aes.c
-#: shared-bindings/alarm/__init__.c shared-bindings/busio/SPI.c
-#: shared-bindings/microcontroller/Pin.c
-#: shared-bindings/neopixel_write/__init__.c
-msgid "Expected a %q"
-msgstr "Expected a %q"
-
-#: ports/raspberrypi/bindings/cyw43/__init__.c
-msgid "Expected a %q or %q"
-msgstr ""
-
 #: shared-bindings/alarm/__init__.c
-msgid "Expected an %q"
+msgid "Expected a kind of %q"
 msgstr ""
 
 #: ports/espressif/common-hal/_bleio/Adapter.c
@@ -1127,11 +1124,6 @@ msgstr "I2C peripheral in use"
 #: shared-bindings/audiobusio/I2SOut.c
 msgid "I2SOut not available"
 msgstr "I2SOut not available"
-
-#: shared-bindings/aesio/aes.c
-#, c-format
-msgid "IV must be %d bytes long"
-msgstr "IV must be %d bytes long"
 
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 msgid "In-buffer elements must be <= 4 bytes long"
@@ -1595,10 +1587,6 @@ msgstr "Not connected"
 msgid "Not playing"
 msgstr "Not playing"
 
-#: shared-bindings/_bleio/__init__.c
-msgid "Not settable"
-msgstr "Not settable"
-
 #: ports/espressif/common-hal/paralleldisplay/ParallelBus.c
 #, c-format
 msgid "Number of data_pins must be 8 or 16, not %d"
@@ -1879,18 +1867,15 @@ msgstr "RTC is not supported on this board"
 msgid "Random number generation error"
 msgstr "Random number generation error"
 
+#: shared-bindings/_bleio/__init__.c
 #: shared-bindings/memorymonitor/AllocationSize.c
-#: shared-bindings/pulseio/PulseIn.c
+#: shared-bindings/pulseio/PulseIn.c shared-module/displayio/Bitmap.c
 msgid "Read-only"
 msgstr "Read-only"
 
 #: extmod/vfs_fat.c py/moduerrno.c
 msgid "Read-only filesystem"
 msgstr "Read-only filesystem"
-
-#: shared-module/displayio/Bitmap.c
-msgid "Read-only object"
-msgstr "Read-only object"
 
 #: ports/espressif/common-hal/espidf/__init__.c ports/espressif/esp_error.c
 msgid "Received response was invalid"
@@ -2073,7 +2058,10 @@ msgstr ""
 msgid "The above exception was the direct cause of the following exception:"
 msgstr ""
 
+#: ports/espressif/boards/m5stack_atom_echo/mpconfigboard.h
 #: ports/espressif/boards/m5stack_atom_lite/mpconfigboard.h
+#: ports/espressif/boards/m5stack_atom_matrix/mpconfigboard.h
+#: ports/espressif/boards/m5stack_atom_u/mpconfigboard.h
 msgid "The central button was pressed at start up.\n"
 msgstr ""
 
@@ -2744,6 +2732,10 @@ msgstr "can't set 512 block size"
 msgid "can't set attribute"
 msgstr "can't set attribute"
 
+#: py/runtime.c
+msgid "can't set attribute '%q'"
+msgstr ""
+
 #: py/emitnative.c
 msgid "can't store '%q'"
 msgstr "can't store '%q'"
@@ -3002,14 +2994,6 @@ msgstr ""
 msgid "exceptions must derive from BaseException"
 msgstr "exceptions must derive from BaseException"
 
-#: shared-bindings/canio/CAN.c
-msgid "expected '%q' but got '%q'"
-msgstr "expected '%q' but got '%q'"
-
-#: shared-bindings/canio/CAN.c
-msgid "expected '%q' or '%q' but got '%q'"
-msgstr "expected '%q' or '%q' but got '%q'"
-
 #: py/objstr.c
 msgid "expected ':' after format specifier"
 msgstr "expected ':' after format specifier"
@@ -3107,10 +3091,6 @@ msgstr "font must be 2048 bytes long"
 #: py/objstr.c
 msgid "format requires a dict"
 msgstr "format requires a dict"
-
-#: shared-bindings/microcontroller/Processor.c
-msgid "frequency is read-only for this board"
-msgstr ""
 
 #: py/objdeque.c
 msgid "full"
@@ -4382,6 +4362,25 @@ msgstr "zi must be of float type"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi must be of shape (n_section, 2)"
+
+#~ msgid "Expected a %q"
+#~ msgstr "Expected a %q"
+
+#, c-format
+#~ msgid "IV must be %d bytes long"
+#~ msgstr "IV must be %d bytes long"
+
+#~ msgid "Not settable"
+#~ msgstr "Not settable"
+
+#~ msgid "expected '%q' but got '%q'"
+#~ msgstr "expected '%q' but got '%q'"
+
+#~ msgid "expected '%q' or '%q' but got '%q'"
+#~ msgstr "expected '%q' or '%q' but got '%q'"
+
+#~ msgid "Read-only object"
+#~ msgstr "Read-only object"
 
 #~ msgid "%q length must be >= 1"
 #~ msgstr "%q length must be >= 1"
