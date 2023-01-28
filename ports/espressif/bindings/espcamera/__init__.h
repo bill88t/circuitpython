@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2022 microDev
+ * Copyright (c) 2022 Jeff Epler for Adafruit Industries
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,20 @@
 
 #pragma once
 
+#include "py/enum.h"
 #include "py/obj.h"
-#include "bindings/espulp/Architecture.h"
 
-typedef struct {
-    mp_obj_base_t base;
-    espulp_architecture_t arch;
-    bool inited;
-} espulp_ulp_obj_t;
+#include "esp_camera.h"
+
+extern const mp_obj_type_t espcamera_grab_mode_type;
+extern const cp_enum_obj_t grab_mode_WHEN_EMPTY_obj;
+extern const mp_obj_type_t espcamera_pixel_format_type;
+extern const cp_enum_obj_t pixel_format_RGB565_obj;
+extern const mp_obj_type_t espcamera_frame_size_type;
+extern const cp_enum_obj_t frame_size_QQVGA_obj;
+extern const mp_obj_type_t espcamera_gain_ceiling_type;
+
+extern camera_grab_mode_t validate_grab_mode(mp_obj_t obj, qstr arg_name);
+extern pixformat_t validate_pixel_format(mp_obj_t obj, qstr arg_name);
+extern framesize_t validate_frame_size(mp_obj_t obj, qstr arg_name);
+extern gainceiling_t validate_gain_ceiling(mp_obj_t obj, qstr arg_name);

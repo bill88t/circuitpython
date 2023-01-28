@@ -3,7 +3,8 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2021 Jeff Epler for Adafruit Industries
+ * Copyright (c) 2019 Nick Moore for Adafruit Industries
+ * Copyright (c) 2019 Artur Pacholec
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,30 +25,34 @@
  * THE SOFTWARE.
  */
 
-#include <stdint.h>
+#include <stdlib.h>
 
 #include "py/obj.h"
 #include "py/runtime.h"
+#include "shared/timeutils/timeutils.h"
+#include "supervisor/port.h"
 
-#include "shared-bindings/imagecapture/ParallelImageCapture.h"
+// This is the time in seconds since 2000 that the RTC was started.
+// TODO: Change the offset to ticks so that it can be a subsecond adjustment.
+static uint32_t rtc_offset = 0;
 
-//| """Support for "Parallel capture" interfaces
-//|
-//| .. seealso::
-//|
-//|     Espressif microcontrollers use the `espcamera` module together.
-//|
-//| """
-STATIC const mp_rom_map_elem_t imagecapture_module_globals_table[] = {
-    { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_imagecapture) },
-    { MP_ROM_QSTR(MP_QSTR_ParallelImageCapture), MP_ROM_PTR(&imagecapture_parallelimagecapture_type) },
-};
+void common_hal_rtc_get_time(timeutils_struct_time_t *tm) {
+    uint64_t ticks_s = port_get_raw_ticks(NULL) / 1024;
+    timeutils_seconds_since_2000_to_struct_time(rtc_offset + ticks_s, tm);
+}
 
-STATIC MP_DEFINE_CONST_DICT(imagecapture_module_globals, imagecapture_module_globals_table);
+void common_hal_rtc_set_time(timeutils_struct_time_t *tm) {
+    uint64_t ticks_s = port_get_raw_ticks(NULL) / 1024;
+    uint32_t epoch_s = timeutils_seconds_since_2000(
+        tm->tm_year, tm->tm_mon, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec
+        );
+    rtc_offset = epoch_s - ticks_s;
+}
 
-const mp_obj_module_t imagecapture_module = {
-    .base = { &mp_type_module },
-    .globals = (mp_obj_dict_t *)&imagecapture_module_globals,
-};
+int common_hal_rtc_get_calibration(void) {
+    return 0;
+}
 
-MP_REGISTER_MODULE(MP_QSTR_imagecapture, imagecapture_module, CIRCUITPY_IMAGECAPTURE);
+void common_hal_rtc_set_calibration(int calibration) {
+    mp_raise_NotImplementedError_varg(translate("%q"), MP_QSTR_calibration);
+}

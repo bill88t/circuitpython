@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2019 Scott Shawcroft for Adafruit Industries
+ * Copyright (c) 2023 MicroDev
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,17 @@
  * THE SOFTWARE.
  */
 
-// Micropython setup
+#ifndef MICROPY_INCLUDED_BINDINGS_ESPULP_ARCHITECTURE_H
+#define MICROPY_INCLUDED_BINDINGS_ESPULP_ARCHITECTURE_H
 
-#define MICROPY_HW_BOARD_NAME       "Feather ESP32S2 without PSRAM"
-#define MICROPY_HW_MCU_NAME         "ESP32S2"
+#include "py/enum.h"
 
-#define MICROPY_HW_NEOPIXEL (&pin_GPIO33)
-#define CIRCUITPY_STATUS_LED_POWER (&pin_GPIO21)
+typedef enum {
+    FSM,
+    RISCV
+} espulp_architecture_t;
 
-#define MICROPY_HW_LED_STATUS (&pin_GPIO13)
+extern const mp_obj_type_t espulp_architecture_type;
+extern const cp_enum_obj_t architecture_FSM_obj;
 
-#define DEFAULT_I2C_BUS_SCL (&pin_GPIO4)
-#define DEFAULT_I2C_BUS_SDA (&pin_GPIO3)
-
-#define DEFAULT_SPI_BUS_SCK (&pin_GPIO36)
-#define DEFAULT_SPI_BUS_MOSI (&pin_GPIO35)
-#define DEFAULT_SPI_BUS_MISO (&pin_GPIO37)
-
-#define DOUBLE_TAP_PIN (&pin_GPIO34)
+#endif // MICROPY_INCLUDED_BINDINGS_ESPULP_ARCHITECTURE_H
