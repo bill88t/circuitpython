@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2021 Lucian Copeland for Adafruit Industries
+ * Copyright (c) 2020 Scott Shawcroft for Adafruit Industries
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,16 @@
  * THE SOFTWARE.
  */
 
-#include <string.h>
+#include "supervisor/board.h"
+#include "mpconfigboard.h"
+#include "shared-bindings/microcontroller/Pin.h"
 
-#include "py/runtime.h"
-#include "common-hal/alarm/SleepMemory.h"
-#include "shared-bindings/alarm/SleepMemory.h"
-
-void alarm_sleep_memory_reset(void) {
+void board_init(void) {
+    // Debug UART
+    #ifdef DEBUG
+    common_hal_never_reset_pin(&pin_GPIO43);
+    common_hal_never_reset_pin(&pin_GPIO44);
+    #endif
 }
 
-uint32_t common_hal_alarm_sleep_memory_get_length(alarm_sleep_memory_obj_t *self) {
-    return 0;
-}
-
-bool common_hal_alarm_sleep_memory_set_bytes(alarm_sleep_memory_obj_t *self, uint32_t start_index, const uint8_t *values, uint32_t len) {
-    mp_raise_NotImplementedError(translate("Sleep Memory not available"));
-    return false;
-}
-
-void common_hal_alarm_sleep_memory_get_bytes(alarm_sleep_memory_obj_t *self, uint32_t start_index, uint8_t *values, uint32_t len) {
-    mp_raise_NotImplementedError(translate("Sleep Memory not available"));
-}
+// Use the MP_WEAK supervisor/shared/board.c versions of routines not defined here.

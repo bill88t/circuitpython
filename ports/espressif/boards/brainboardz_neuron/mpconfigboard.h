@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2021 Lucian Copeland for Adafruit Industries
+ * Copyright (c) 2019 Scott Shawcroft for Adafruit Industries
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,10 @@
  * THE SOFTWARE.
  */
 
-#include <string.h>
+// Micropython setup
 
-#include "py/runtime.h"
-#include "common-hal/alarm/SleepMemory.h"
-#include "shared-bindings/alarm/SleepMemory.h"
+#define MICROPY_HW_BOARD_NAME       "Neuron"
+#define MICROPY_HW_MCU_NAME         "ESP32S3"
 
-void alarm_sleep_memory_reset(void) {
-}
-
-uint32_t common_hal_alarm_sleep_memory_get_length(alarm_sleep_memory_obj_t *self) {
-    return 0;
-}
-
-bool common_hal_alarm_sleep_memory_set_bytes(alarm_sleep_memory_obj_t *self, uint32_t start_index, const uint8_t *values, uint32_t len) {
-    mp_raise_NotImplementedError(translate("Sleep Memory not available"));
-    return false;
-}
-
-void common_hal_alarm_sleep_memory_get_bytes(alarm_sleep_memory_obj_t *self, uint32_t start_index, uint8_t *values, uint32_t len) {
-    mp_raise_NotImplementedError(translate("Sleep Memory not available"));
-}
+#define DEFAULT_UART_BUS_RX         (&pin_GPIO44)
+#define DEFAULT_UART_BUS_TX         (&pin_GPIO43)
