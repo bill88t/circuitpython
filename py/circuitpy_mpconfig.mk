@@ -526,7 +526,7 @@ CFLAGS += -DUSB_NUM_ENDPOINT_PAIRS=$(USB_NUM_ENDPOINT_PAIRS)
 CIRCUITPY_USTACK ?= 0
 CFLAGS += -DCIRCUITPY_USTACK=$(CIRCUITPY_USTACK)
 
-# for decompressing utlities
+# for decompressing utilities
 CIRCUITPY_ZLIB ?= $(CIRCUITPY_FULL_BUILD)
 CFLAGS += -DCIRCUITPY_ZLIB=$(CIRCUITPY_ZLIB)
 
@@ -559,6 +559,10 @@ CFLAGS += -DCIRCUITPY_TUSB_MEM_ALIGN=$(CIRCUITPY_TUSB_MEM_ALIGN)
 
 CIRCUITPY_TUSB_ATTR_USBRAM ?= ".bss.usbram"
 CFLAGS += -DCIRCUITPY_TUSB_ATTR_USBRAM=$(CIRCUITPY_TUSB_ATTR_USBRAM)
+
+# Output function trace information from the ARM ITM.
+CIRCUITPY_SWO_TRACE ?= 0
+CFLAGS += -DCIRCUITPY_SWO_TRACE=$(CIRCUITPY_SWO_TRACE)
 
 # Define an equivalent for MICROPY_LONGINT_IMPL, to pass to $(MPY-TOOL) in py/mkrules.mk
 # $(MPY-TOOL) needs to know what kind of longint to use (if any) to freeze long integers.
