@@ -1558,6 +1558,7 @@ msgid "Number of data_pins must be 8 or 16, not %d"
 msgstr ""
 
 #: shared-bindings/util.c
+#: shared-bindings/displayio/FourWire.c
 msgid ""
 "Object has been deinitialized and can no longer be used. Create a new object."
 msgstr ""
