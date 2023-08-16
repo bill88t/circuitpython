@@ -252,7 +252,9 @@ void displayio_display_core_set_region_to_update(displayio_display_core_t *self,
     }
 
     // Set column.
-    displayio_display_core_begin_transaction(self);
+    if (!displayio_display_core_begin_transaction(self)) {
+        return;
+    }
     uint8_t data[5];
     data[0] = self->column_command;
     uint8_t data_length = 1;

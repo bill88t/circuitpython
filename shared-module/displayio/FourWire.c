@@ -29,14 +29,12 @@
 #include <stdint.h>
 
 #include "py/gc.h"
-#include "py/runtime.h"
 #include "shared-bindings/busio/SPI.h"
 #include "shared-bindings/digitalio/DigitalInOut.h"
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-bindings/microcontroller/__init__.h"
 #include "shared-bindings/time/__init__.h"
 #include "shared-module/displayio/display_core.h"
-#include "supervisor/shared/translate/translate.h"
 
 void common_hal_displayio_fourwire_construct(displayio_fourwire_obj_t *self,
     busio_spi_obj_t *spi, const mcu_pin_obj_t *command,
@@ -99,7 +97,7 @@ bool common_hal_displayio_fourwire_reset(mp_obj_t obj) {
 
 bool common_hal_displayio_fourwire_bus_free(mp_obj_t obj) {
     displayio_fourwire_obj_t *self = MP_OBJ_TO_PTR(obj);
-    if (!common_hal_busio_spi_try_lock(self->bus)) {
+    if (common_hal_busio_spi_deinited(self->bus) || !common_hal_busio_spi_try_lock(self->bus)) {
         return false;
     }
     common_hal_busio_spi_unlock(self->bus);
@@ -110,7 +108,7 @@ bool common_hal_displayio_fourwire_begin_transaction(mp_obj_t obj) {
     displayio_fourwire_obj_t *self = MP_OBJ_TO_PTR(obj);
     if (common_hal_busio_spi_deinited(self->bus)) {
         common_hal_displayio_fourwire_deinit(self);
-        mp_raise_ValueError(translate("Object has been deinitialized and can no longer be used. Create a new object."));
+        return false;
     }
     if (!common_hal_busio_spi_try_lock(self->bus)) {
         return false;
