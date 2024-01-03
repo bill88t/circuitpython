@@ -136,8 +136,20 @@ STATIC mp_obj_t analogio_analogin_obj_get_reference_voltage(mp_obj_t self_in) {
 MP_DEFINE_CONST_FUN_OBJ_1(analogio_analogin_get_reference_voltage_obj,
     analogio_analogin_obj_get_reference_voltage);
 
-MP_PROPERTY_GETTER(analogio_analogin_reference_voltage_obj,
-    (mp_obj_t)&analogio_analogin_get_reference_voltage_obj);
+STATIC mp_obj_t analogio_analogin_obj_set_reference_voltage(mp_obj_t self_in, mp_obj_t value) {
+    analogio_analogin_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    check_for_deinit(self);
+
+    common_hal_analogio_analogin_set_reference_voltage(self, mp_obj_get_float(value));
+    return mp_const_none;
+}
+
+MP_DEFINE_CONST_FUN_OBJ_2(analogio_analogin_set_reference_voltage_obj,
+    analogio_analogin_obj_set_reference_voltage);
+
+MP_PROPERTY_GETSET(analogio_analogin_reference_voltage_obj,
+    (mp_obj_t)&analogio_analogin_get_reference_voltage_obj,
+    (mp_obj_t)&analogio_analogin_set_reference_voltage_obj);
 
 STATIC const mp_rom_map_elem_t analogio_analogin_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_deinit),             MP_ROM_PTR(&analogio_analogin_deinit_obj) },

@@ -71,6 +71,7 @@ void common_hal_analogio_analogin_construct(analogio_analogin_obj_t *self,
     // Turn off the pull-up as soon as we know the pin will be used for analog reads,
     // since it may take a while for the voltage to stabilize if the input is high-impedance.
     gpio_pullup_dis(pin->number);
+    self->vref = 3300;
 }
 
 bool common_hal_analogio_analogin_deinited(analogio_analogin_obj_t *self) {
@@ -86,6 +87,10 @@ void common_hal_analogio_analogin_deinit(analogio_analogin_obj_t *self) {
 }
 
 uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
+    if (!self->vref) {
+        // Do not divide by zero.
+        return 65535;
+    }
     adc_oneshot_unit_handle_t adc_handle;
     adc_oneshot_unit_init_cfg_t adc_config = {
         .unit_id = self->pin->adc_index,
@@ -166,9 +171,17 @@ uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
     }
     #endif
     adc_oneshot_del_unit(adc_handle);
-    return voltage * ((1 << 16) - 1) / 3300;
+    return voltage * ((1 << 16) - 1) / self->vref;
 }
 
 float common_hal_analogio_analogin_get_reference_voltage(analogio_analogin_obj_t *self) {
-    return 3.3f;
+    return (float)self->vref * 0.001f;
+}
+
+void common_hal_analogio_analogin_set_reference_voltage(analogio_analogin_obj_t *self, mp_float_t value) {
+    if (value <= 0.0f) {
+        self->vref = 0;
+    } else {
+        self->vref = (int)(value * 1000);
+    }
 }

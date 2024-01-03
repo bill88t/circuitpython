@@ -37,6 +37,7 @@
 typedef struct {
     mp_obj_base_t base;
     const mcu_pin_obj_t *pin;
+    mp_int_t vref;
 } analogio_analogin_obj_t;
 
 #endif // MICROPY_INCLUDED_ESPRESSIF_COMMON_HAL_ANALOGIO_ANALOGIN_H
