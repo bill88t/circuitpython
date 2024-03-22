@@ -1,0 +1,19 @@
+#
+# Espressif IoT Development Framework Configuration
+#
+#
+# Security features
+#
+# end of Security features
+
+# end of Hardware Settings
+
+#
+# LWIP
+#
+CONFIG_LWIP_LOCAL_HOSTNAME="ESP32CAM"
+# end of LWIP
+
+# end of Component config
+
+# end of Espressif IoT Development Framework Configuration
