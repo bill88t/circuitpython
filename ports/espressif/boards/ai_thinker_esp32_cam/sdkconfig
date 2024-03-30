@@ -12,6 +12,7 @@
 # LWIP
 #
 CONFIG_LWIP_LOCAL_HOSTNAME="ESP32CAM"
+CONFIG_OV2640_SUPPORT=y
 # end of LWIP
 
 # end of Component config
