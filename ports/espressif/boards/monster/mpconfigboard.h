@@ -29,14 +29,7 @@
 #define MICROPY_HW_BOARD_NAME       "Monster"
 #define MICROPY_HW_MCU_NAME         "ESP32"
 
-#define CIRCUITPY_BOARD_I2C         (1)
-#define CIRCUITPY_BOARD_I2C_PIN     {{.scl = &pin_GPIO22, .sda = &pin_GPIO23}}
-
-#define CIRCUITPY_BOARD_SPI         (1)
-#define CIRCUITPY_BOARD_SPI_PIN     {{.clock = &pin_GPIO5, .mosi = &pin_GPIO18, .miso = &pin_GPIO19}}
-
-#define CIRCUITPY_BOARD_UART        (1)
-#define CIRCUITPY_BOARD_UART_PIN    {{.tx = &pin_GPIO17, .rx = &pin_GPIO16}}
+#define MICROPY_HW_LED_STATUS       (&pin_GPIO5)
 
 // UART pins attached to the USB-serial converter chip
 #define CIRCUITPY_CONSOLE_UART_TX (&pin_GPIO1)
