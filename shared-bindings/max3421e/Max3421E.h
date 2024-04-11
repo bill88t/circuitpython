@@ -1,9 +1,9 @@
 /*
- * This file is part of the MicroPython project, http://micropython.org/
+ * This file is part of the Micro Python project, http://micropython.org/
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Scott Shawcroft for Adafruit Industries
+ * Copyright (c) 2024 Scott Shawcroft for Adafruit Industries
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,27 @@
  * THE SOFTWARE.
  */
 
-#ifndef MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
-#define MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
+#pragma once
 
-#include "common-hal/microcontroller/Pin.h"
+#include "shared-module/max3421e/Max3421E.h"
 
-#include "audio_dma.h"
-#include "py/obj.h"
+extern const mp_obj_type_t max3421e_max3421e_type;
 
-typedef struct {
-    mp_obj_base_t base;
-    const mcu_pin_obj_t *left_channel;
-    audio_dma_t left_dma;
-    #ifdef SAM_D5X_E5X
-    const mcu_pin_obj_t *right_channel;
-    audio_dma_t right_dma;
-    #endif
-    uint8_t tc_index;
+void common_hal_max3421e_max3421e_construct(max3421e_max3421e_obj_t *self,
+    busio_spi_obj_t *spi, const mcu_pin_obj_t *chip_select, const mcu_pin_obj_t *irq,
+    uint32_t baudrate);
 
-    uint8_t tc_to_dac_event_channel;
-    bool playing;
-    uint16_t quiescent_value;
-} audioio_audioout_obj_t;
+bool common_hal_max3421e_max3421e_deinited(max3421e_max3421e_obj_t *self);
+void common_hal_max3421e_max3421e_deinit(max3421e_max3421e_obj_t *self);
 
-void audioout_background(void);
+// TinyUSB requires these three functions.
 
-#endif // MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
+// API to control MAX3421 SPI CS
+extern void tuh_max3421_spi_cs_api(uint8_t rhport, bool active);
+
+// API to transfer data with MAX3421 SPI
+// Either tx_buf or rx_buf can be NULL, which means transfer is write or read only
+extern bool tuh_max3421_spi_xfer_api(uint8_t rhport, uint8_t const *tx_buf, uint8_t *rx_buf, size_t xfer_bytes);
+
+// API to enable/disable MAX3421 INTR pin interrupt
+extern void tuh_max3421_int_api(uint8_t rhport, bool enabled);

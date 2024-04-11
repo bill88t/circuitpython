@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Scott Shawcroft for Adafruit Industries
+ * Copyright (c) 2024 Scott Shawcroft for Adafruit Industries
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,4 @@
  * THE SOFTWARE.
  */
 
-#ifndef MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
-#define MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
-
-#include "common-hal/microcontroller/Pin.h"
-
-#include "audio_dma.h"
-#include "py/obj.h"
-
-typedef struct {
-    mp_obj_base_t base;
-    const mcu_pin_obj_t *left_channel;
-    audio_dma_t left_dma;
-    #ifdef SAM_D5X_E5X
-    const mcu_pin_obj_t *right_channel;
-    audio_dma_t right_dma;
-    #endif
-    uint8_t tc_index;
-
-    uint8_t tc_to_dac_event_channel;
-    bool playing;
-    uint16_t quiescent_value;
-} audioio_audioout_obj_t;
-
-void audioout_background(void);
-
-#endif // MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
+#pragma once

@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Scott Shawcroft for Adafruit Industries
+ * Copyright (c) 2024 Scott Shawcroft for Adafruit Industries
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,33 @@
  * THE SOFTWARE.
  */
 
-#ifndef MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
-#define MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
+#pragma once
 
-#include "common-hal/microcontroller/Pin.h"
+#include "common-hal/busio/SPI.h"
+#include "common-hal/digitalio/DigitalInOut.h"
+#include "shared-module/displayio/Group.h"
 
-#include "audio_dma.h"
-#include "py/obj.h"
+#define CIRCUITPY_USB_MAX3421_INSTANCE 2
 
 typedef struct {
     mp_obj_base_t base;
-    const mcu_pin_obj_t *left_channel;
-    audio_dma_t left_dma;
-    #ifdef SAM_D5X_E5X
-    const mcu_pin_obj_t *right_channel;
-    audio_dma_t right_dma;
-    #endif
-    uint8_t tc_index;
+    busio_spi_obj_t *bus;
+    digitalio_digitalinout_obj_t chip_select;
+    digitalio_digitalinout_obj_t irq;
+    uint32_t baudrate;
+    bool bus_locked;
+} max3421e_max3421e_obj_t;
 
-    uint8_t tc_to_dac_event_channel;
-    bool playing;
-    uint16_t quiescent_value;
-} audioio_audioout_obj_t;
+// Ports need to implement these two functions in order to support pin interrupts.
 
-void audioout_background(void);
+// Setup irq on self->irq to call tuh_int_handler(rhport, true) on falling edge
+void common_hal_max3421e_max3421e_init_irq(max3421e_max3421e_obj_t *self);
 
-#endif // MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_AUDIOIO_AUDIOOUT_H
+// Deinit the irq
+void common_hal_max3421e_max3421e_deinit_irq(max3421e_max3421e_obj_t *self);
+
+// Enable or disable the irq interrupt.
+void common_hal_max3421e_max3421e_irq_enabled(max3421e_max3421e_obj_t *self, bool enabled);
+
+// Queue up the actual interrupt handler for when the SPI bus is free.
+void max3421e_interrupt_handler(max3421e_max3421e_obj_t *self);
