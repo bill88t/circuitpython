@@ -31,6 +31,8 @@
 
 #define MICROPY_HW_LED_STATUS       (&pin_GPIO5)
 
+#define CIRCUITPY_BOOT_BUTTON       (&pin_GPIO0)
+
 // UART pins attached to the USB-serial converter chip
 #define CIRCUITPY_CONSOLE_UART_TX (&pin_GPIO1)
 #define CIRCUITPY_CONSOLE_UART_RX (&pin_GPIO3)
