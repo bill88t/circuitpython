@@ -51,6 +51,11 @@ void common_hal_analogio_analogin_deinit(analogio_analogin_obj_t *self) {
     self->pin = NULL;
 }
 
+uint16_t common_hal_analogio_analogin_get_millivolts(analogio_analogin_obj_t *self) {
+    // Unused in mimxrt10xx
+    return 0;
+}
+
 uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
     adc_channel_config_t config = { 0 };
     config.channelNumber = self->pin->adc_channel;
@@ -65,6 +70,10 @@ uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
 
     // Stretch 12-bit ADC reading to 16-bit range
     return (value << 4) | (value >> 8);
+}
+
+float common_hal_analogio_analogin_get_voltage(analogio_analogin_obj_t *self) {
+    return (float)common_hal_analogio_analogin_get_value(self) * (3.3f / 65535.0f);
 }
 
 float common_hal_analogio_analogin_get_reference_voltage(analogio_analogin_obj_t *self) {
