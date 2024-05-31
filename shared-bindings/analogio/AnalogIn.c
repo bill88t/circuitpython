@@ -112,7 +112,8 @@ MP_PROPERTY_GETTER(analogio_analogin_value_obj,
 static mp_obj_t analogio_analogin_obj_get_voltage(mp_obj_t self_in) {
     analogio_analogin_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
-    return MP_OBJ_NEW_FLOAT(common_hal_analogio_analogin_get_voltage(self));
+    float voltage_val = common_hal_analogio_analogin_get_voltage(self);
+    return mp_obj_new_float(voltage_val);
 }
 MP_DEFINE_CONST_FUN_OBJ_1(analogio_analogin_get_voltage_obj, analogio_analogin_obj_get_voltage);
 

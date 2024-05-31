@@ -22,7 +22,7 @@
 #include <string.h>
 
 #define DEFAULT_VREF        1100
-#define NO_OF_SAMPLES       2
+#define NO_OF_SAMPLES       15
 #define ATTENUATION         ADC_ATTEN_DB_11
 #if defined(CONFIG_IDF_TARGET_ESP32)
 #define DATA_WIDTH          ADC_BITWIDTH_12
@@ -231,7 +231,8 @@ float common_hal_analogio_analogin_get_voltage(analogio_analogin_obj_t *self) {
         adc_cali_delete_scheme_line_fitting(calibration);
     }
     #endif
-    return (float)voltage / 1000.0;
+    adc_oneshot_del_unit(adc_handle);
+    return voltage / 1000.0f;
 }
 
 float common_hal_analogio_analogin_get_reference_voltage(analogio_analogin_obj_t *self) {
