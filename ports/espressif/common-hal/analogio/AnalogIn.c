@@ -22,7 +22,7 @@
 #include <string.h>
 
 #define DEFAULT_VREF        1100
-#define NO_OF_SAMPLES       2
+#define NO_OF_SAMPLES       15
 #define ATTENUATION         ADC_ATTEN_DB_11
 #if defined(CONFIG_IDF_TARGET_ESP32)
 #define DATA_WIDTH          ADC_BITWIDTH_12
