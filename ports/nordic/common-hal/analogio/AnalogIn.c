@@ -52,6 +52,12 @@ void common_hal_analogio_analogin_deinit(analogio_analogin_obj_t *self) {
     self->pin = NULL;
 }
 
+
+uint16_t common_hal_analogio_analogin_get_millivolts(analogio_analogin_obj_t *self) {
+    // Unused on nordic.
+    return 0;
+}
+
 uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
     // Something else might have used the ADC in a different way,
     // so we completely re-initialize it.
@@ -117,6 +123,10 @@ uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
 
     // Stretch 14-bit ADC reading to 16-bit range
     return (value << 2) | (value >> 12);
+}
+
+float common_hal_analogio_analogin_get_voltage(analogio_analogin_obj_t *self) {
+    return (float)common_hal_analogio_analogin_get_value(self) * (3.3f / 65535.0f);
 }
 
 float common_hal_analogio_analogin_get_reference_voltage(analogio_analogin_obj_t *self) {

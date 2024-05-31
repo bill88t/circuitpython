@@ -58,6 +58,10 @@ void common_hal_analogio_analogin_deinit(analogio_analogin_obj_t *self) {
     self->pin = NULL;
 }
 
+uint16_t common_hal_analogio_analogin_get_millivolts(analogio_analogin_obj_t *self) {
+    // Unused on rp2.
+    return 0;
+}
 uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
     uint16_t value;
     if (SPECIAL_PIN(self->pin)) {
