@@ -105,6 +105,21 @@ MP_DEFINE_CONST_FUN_OBJ_1(analogio_analogin_get_value_obj, analogio_analogin_obj
 MP_PROPERTY_GETTER(analogio_analogin_value_obj,
     (mp_obj_t)&analogio_analogin_get_value_obj);
 
+//|     voltage: float
+//|     """The voltage value on the analog pin between 0.0 and reference_voltage as a
+//|     ``float`` in volts."""
+//|
+static mp_obj_t analogio_analogin_obj_get_voltage(mp_obj_t self_in) {
+    analogio_analogin_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    check_for_deinit(self);
+    return MP_OBJ_NEW_FLOAT(common_hal_analogio_analogin_get_voltage(self));
+}
+MP_DEFINE_CONST_FUN_OBJ_1(analogio_analogin_get_voltage_obj, analogio_analogin_obj_get_voltage);
+
+MP_PROPERTY_GETTER(analogio_analogin_voltage_obj,
+    (mp_obj_t)&analogio_analogin_get_voltage_obj);
+
+
 //|     reference_voltage: float
 //|     """The maximum voltage measurable (also known as the reference voltage) as a
 //|     ``float`` in Volts.  Note the ADC value may not scale to the actual voltage linearly
@@ -132,6 +147,7 @@ static const mp_rom_map_elem_t analogio_analogin_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___enter__),          MP_ROM_PTR(&default___enter___obj) },
     { MP_ROM_QSTR(MP_QSTR___exit__),           MP_ROM_PTR(&analogio_analogin___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_value),              MP_ROM_PTR(&analogio_analogin_value_obj)},
+    { MP_ROM_QSTR(MP_QSTR_voltage),            MP_ROM_PTR(&analogio_analogin_voltage_obj)},
     { MP_ROM_QSTR(MP_QSTR_reference_voltage),  MP_ROM_PTR(&analogio_analogin_reference_voltage_obj)},
 };
 
