@@ -86,11 +86,22 @@ bool common_hal_analogio_analogin_deinited(analogio_analogin_obj_t *self) {
 }
 
 uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
+    // Not used for cxd56
+    return 0;
+}
+
+uint16_t common_hal_analogio_analogin_get_value(analogio_analogin_obj_t *self) {
     int16_t value = 0;
 
     read(analogin_dev[self->number].fd, &value, sizeof(value));
 
     return (uint16_t)32768 + (uint16_t)value;
+}
+
+float common_hal_analogio_analogin_get_voltage(analogio_analogin_obj_t *self) {
+    float value = common_hal_analogio_analogin_get_value(self);
+    float reference = common_hal_analogio_analogin_get_reference_voltage(self);
+    return value * (reference / 65535.0f);
 }
 
 // Reference voltage is a fixed value which is depending on the board.
