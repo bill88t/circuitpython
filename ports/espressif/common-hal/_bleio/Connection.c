@@ -1,29 +1,9 @@
-/*
- * This file is part of the MicroPython project, http://micropython.org/
- *
- * The MIT License (MIT)
- *
- * Copyright (c) 2018 Dan Halbert for Adafruit Industries
- * Copyright (c) 2018 Artur Pacholec
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+// This file is part of the CircuitPython project: https://circuitpython.org
+//
+// SPDX-FileCopyrightText: Copyright (c) 2018 Dan Halbert for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) 2018 Artur Pacholec
+//
+// SPDX-License-Identifier: MIT
 
 #include "shared-bindings/_bleio/Connection.h"
 
@@ -75,22 +55,31 @@ int bleio_connection_event_cb(struct ble_gap_event *event, void *connection_in) 
         }
 
         case BLE_GAP_EVENT_PHY_UPDATE_COMPLETE: {
-            #if CIRCUITPY_VERBOSE_BLE
-            mp_printf(&mp_plat_print, "TODO connection event: PHY update complete\n");
-            #endif
+            // Nothing to do here. CircuitPython doesn't tell the user what PHY
+            // we're on.
             break;
         }
 
         case BLE_GAP_EVENT_CONN_UPDATE: {
-            #if CIRCUITPY_VERBOSE_BLE
-            mp_printf(&mp_plat_print, "TODO connection event: connection update\n");
-            #endif
+            struct ble_gap_conn_desc desc;
+            int rc = ble_gap_conn_find(event->conn_update.conn_handle, &desc);
+            assert(rc == 0);
+            connection->conn_params_updating = false;
             break;
         }
-        case BLE_GAP_EVENT_L2CAP_UPDATE_REQ: {
-            #if CIRCUITPY_VERBOSE_BLE
-            mp_printf(&mp_plat_print, "TODO connection event: l2cap update request\n");
-            #endif
+        case BLE_GAP_EVENT_ENC_CHANGE: {
+            struct ble_gap_conn_desc desc;
+            ble_gap_conn_find(event->enc_change.conn_handle, &desc);
+            if (desc.sec_state.encrypted) {
+                connection->pair_status = PAIR_PAIRED;
+            }
+            break;
+        }
+        case BLE_GAP_EVENT_MTU: {
+            if (event->mtu.conn_handle != connection->conn_handle) {
+                return 0;
+            }
+            connection->mtu = event->mtu.value;
             break;
         }
 
@@ -102,14 +91,18 @@ int bleio_connection_event_cb(struct ble_gap_event *event, void *connection_in) 
         case BLE_GAP_EVENT_NOTIFY_TX:
             MP_FALLTHROUGH;
         case BLE_GAP_EVENT_SUBSCRIBE:
-            return ble_event_run_handlers(event);
+            int status = ble_event_run_handlers(event);
+            background_callback_add_core(&bleio_background_callback);
+            return status;
 
         default:
             #if CIRCUITPY_VERBOSE_BLE
             mp_printf(&mp_plat_print, "Unhandled connection event: %d\n", event->type);
             #endif
-            return 0;
+            break;
     }
+
+    background_callback_add_core(&bleio_background_callback);
     return 0;
 }
 
@@ -133,15 +126,34 @@ void common_hal_bleio_connection_disconnect(bleio_connection_internal_t *self) {
 }
 
 void common_hal_bleio_connection_pair(bleio_connection_internal_t *self, bool bond) {
-    // TODO: Implement this.
+    // We may already be trying to pair if we just reconnected to a peer we're
+    // bonded with.
+    while (self->pair_status == PAIR_WAITING && !mp_hal_is_interrupted()) {
+        RUN_BACKGROUND_TASKS;
+    }
+    if (self->pair_status == PAIR_PAIRED) {
+        return;
+    }
+    self->pair_status = PAIR_WAITING;
+    CHECK_NIMBLE_ERROR(ble_gap_security_initiate(self->conn_handle));
+    while (self->pair_status == PAIR_WAITING && !mp_hal_is_interrupted()) {
+        RUN_BACKGROUND_TASKS;
+    }
+    if (mp_hal_is_interrupted()) {
+        return;
+    }
 }
 
 mp_float_t common_hal_bleio_connection_get_connection_interval(bleio_connection_internal_t *self) {
-    // TODO: Implement this.
     while (self->conn_params_updating && !mp_hal_is_interrupted()) {
         RUN_BACKGROUND_TASKS;
     }
-    return 0;
+    if (mp_hal_is_interrupted()) {
+        return 0;
+    }
+    struct ble_gap_conn_desc desc;
+    CHECK_NIMBLE_ERROR(ble_gap_conn_find(self->conn_handle, &desc));
+    return 1.25f * desc.conn_itvl;
 }
 
 // Return the current negotiated MTU length, minus overhead.
@@ -151,13 +163,22 @@ mp_int_t common_hal_bleio_connection_get_max_packet_length(bleio_connection_inte
 
 void common_hal_bleio_connection_set_connection_interval(bleio_connection_internal_t *self, mp_float_t new_interval) {
     self->conn_params_updating = true;
-    // TODO: Implement this.
+    struct ble_gap_conn_desc desc;
+    CHECK_NIMBLE_ERROR(ble_gap_conn_find(self->conn_handle, &desc));
+    uint16_t interval = new_interval / 1.25f;
+    struct ble_gap_upd_params updated = {
+        .itvl_min = interval,
+        .itvl_max = interval,
+        .latency = desc.conn_latency,
+        .supervision_timeout = desc.supervision_timeout
+    };
+    CHECK_NIMBLE_ERROR(ble_gap_update_params(self->conn_handle, &updated));
 }
 
-STATIC volatile int _last_discovery_status;
+static volatile int _last_discovery_status;
 static TaskHandle_t discovery_task = NULL;
 
-STATIC int _discovered_service_cb(uint16_t conn_handle,
+static int _discovered_service_cb(uint16_t conn_handle,
     const struct ble_gatt_error *error,
     const struct ble_gatt_svc *svc,
     void *arg) {
@@ -197,7 +218,7 @@ STATIC int _discovered_service_cb(uint16_t conn_handle,
     return 0;
 }
 
-STATIC int _discovered_characteristic_cb(uint16_t conn_handle,
+static int _discovered_characteristic_cb(uint16_t conn_handle,
     const struct ble_gatt_error *error,
     const struct ble_gatt_chr *chr,
     void *arg) {
@@ -251,7 +272,7 @@ STATIC int _discovered_characteristic_cb(uint16_t conn_handle,
     return 0;
 }
 
-STATIC int _discovered_descriptor_cb(uint16_t conn_handle,
+static int _discovered_descriptor_cb(uint16_t conn_handle,
     const struct ble_gatt_error *error,
     uint16_t chr_val_handle,
     const struct ble_gatt_dsc *dsc,
@@ -306,7 +327,7 @@ STATIC int _discovered_descriptor_cb(uint16_t conn_handle,
     return 0;
 }
 
-STATIC void discover_remote_services(bleio_connection_internal_t *self, mp_obj_t service_uuids_whitelist) {
+static void discover_remote_services(bleio_connection_internal_t *self, mp_obj_t service_uuids_whitelist) {
     // Start over with an empty list.
     self->remote_service_list = mp_obj_new_list(0, NULL);
 
