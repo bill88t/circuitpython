@@ -198,7 +198,6 @@ void common_hal_wifi_init(bool user_initiated) {
     common_hal_wifi_radio_start_station(self);
     // start wifi
     common_hal_wifi_radio_set_enabled(self, true);
-    common_hal_wifi_radio_set_tx_power(self, 8.5);
 }
 
 void wifi_user_reset(void) {
