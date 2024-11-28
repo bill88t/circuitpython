@@ -410,3 +410,6 @@
 [submodule "frozen/CircuitPython_GT911"]
 	path = frozen/CircuitPython_GT911
 	url = https://github.com/rgrizzell/CircuitPython_GT911
+[submodule "ports/analog/msdk"]
+	path = ports/analog/msdk
+	url = https://github.com/analogdevicesinc/msdk.git
