@@ -21,4 +21,3 @@ CIRCUITPY_ROTARYIO = 0
 
 FROZEN_MPY_DIRS += $(TOP)/frozen/CircuitPython_GT911
 FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_Register
-FROZEN_MPY_DIRS += $(TOP)/frozen/micropySX126X
