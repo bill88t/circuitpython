@@ -11,8 +11,8 @@
 
 #define MICROPY_HW_LED_STATUS (&pin_GPIO1)
 
-// #define DEFAULT_I2C_BUS_SCL (&pin_GPIO35) // MODMCU standard pins
-// #define DEFAULT_I2C_BUS_SDA (&pin_GPIO33)
+#define DEFAULT_I2C_BUS_SCL (&pin_GPIO11) // MODMCU standard pins
+#define DEFAULT_I2C_BUS_SDA (&pin_GPIO12)
 
 #define DEFAULT_UART_BUS_RX (&pin_GPIO44)
 #define DEFAULT_UART_BUS_TX (&pin_GPIO43)
